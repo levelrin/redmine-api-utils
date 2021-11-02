@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  redmine-db:
+    image: postgres:13.2
+    environment:
+      PGDATA: /usr/share/pgdata
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./pgdata:/usr/share/pgdata"
+  redmine-web:
+    image: redmine-web:1
+    depends_on:
+      - redmine-db
+    ports:
+      - "3000:3000"
+    working_dir: /usr/local/redmine
+    command: bundle exec rails server webrick -e production
